@@ -28,7 +28,6 @@ export const searchProducts = (
     description: 3,
     slug: 4,
     category: 2,
-    marketing_features: 2,
   };
 
   const queryTokens = tokenize(query);
@@ -39,10 +38,6 @@ export const searchProducts = (
       { field: product.description, weight: weights.description },
       { field: product.metadata.slug, weight: weights.slug },
       { field: product.metadata.category, weight: weights.category },
-      {
-        field: product.marketing_features.join(" "),
-        weight: weights.marketing_features,
-      },
     ]
       .filter(({ field }) => field) // Ensure the field exists
       .reduce((score, { field, weight }) => {
