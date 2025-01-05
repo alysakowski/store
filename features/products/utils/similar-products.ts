@@ -53,7 +53,7 @@ const calculateSimilarityScore = (
 export const findSimilarProducts = (
   products: MappedProduct[],
   targetProduct: MappedProduct,
-  maxResults: number = 4
+  maxResults = 4
 ): MappedProduct[] => {
   const scoredProducts = products
     .filter((product) => product.id !== targetProduct.id) // Exclude the target product itself

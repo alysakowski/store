@@ -17,9 +17,7 @@ export const CheckoutForm = () => {
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<string>();
 
-  const handleSubmit = async (
-    event: React.
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPaymentProcessing(true);
 
