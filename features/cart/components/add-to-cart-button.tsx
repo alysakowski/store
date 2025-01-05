@@ -3,21 +3,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { addToCart } from "../actions/add-to-cart";
+import { useCartModal } from "../context/cart-context";
 
 export default function AddToCartButton({ product }: any) {
   const [isAdding, setIsAdding] = useState(false);
 
-  const addToCart = async () => {
+  const { setIsOpen } = useCartModal();
+
+  const onClick = async () => {
     setIsAdding(true);
-    // Simulate adding to cart
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await addToCart(product.id);
+    setIsOpen(true);
     setIsAdding(false);
-    // Here you would typically call an API to add the item to the cart
-    console.log("Added to cart:", product);
   };
 
   return (
-    <Button onClick={addToCart} disabled={isAdding} className="w-full">
+    <Button onClick={onClick} disabled={isAdding} className="w-full">
       {isAdding ? (
         "Adding to Cart..."
       ) : (

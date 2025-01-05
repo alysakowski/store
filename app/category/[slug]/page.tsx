@@ -1,5 +1,5 @@
 import ProductsList from "@/components/products-list";
-import { deslugify } from "@/features/products/utils";
+import { deslugify } from "@/features/products/utils/slugs";
 import * as Commerce from "commerce-kit";
 import { notFound } from "next/navigation";
 

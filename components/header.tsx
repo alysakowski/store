@@ -4,11 +4,12 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import { ShoppingCartIcon } from "lucide-react";
 import { navigationMenuTriggerStyle } from "./ui/navigation-menu";
 import Link from "next/link";
 import Search from "./search";
 import { Badge } from "./ui/badge";
+import CartNavIcon from "@/features/cart/components/cart-nav-icon";
+import { getCartCookieJson } from "@/features/cart/actions/cart-cookies";
 
 const links = [
   {
@@ -25,7 +26,9 @@ const links = [
   },
 ];
 
-export default function Header() {
+export default async function Header() {
+  const cart = await getCartCookieJson();
+
   return (
     <header className="z-50 py-4 sticky top-0 bg-white/90 backdrop-blur-sm nav-scroll-border">
       <nav className="flex items-center justify-between container max-w-7xl mx-auto">
@@ -63,14 +66,16 @@ export default function Header() {
           <Search />
 
           <div className="relative">
-            <ShoppingCartIcon className="h-6 w-6" />
+            <CartNavIcon />
 
-            <Badge
-              variant="default"
-              className="absolute -right-4 -top-3 px-1.5 py-0.5 text-xs"
-            >
-              0
-            </Badge>
+            {cart && (
+              <Badge
+                variant="default"
+                className="absolute -right-4 -top-3 px-1.5 py-0.5 text-xs"
+              >
+                {cart.linesCount}
+              </Badge>
+            )}
           </div>
         </div>
       </nav>

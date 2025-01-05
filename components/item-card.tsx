@@ -55,7 +55,7 @@ export default function ItemCard({
             <h3 className="text-md font-semibold line-clamp-1">{name}</h3>
 
             <p className="text-sm text-gray-500 mt-1">
-              {formatStripePrice(price)}
+              {formatStripePrice({ ...price })}
             </p>
           </CardContent>
         )}

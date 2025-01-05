@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import Search from "@/components/search";
-import { ShoppingCartIcon } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import CartModalWrapper from "@/features/cart/components/cart-modal-wrapper";
+import { CartModalProvider } from "@/features/cart/context/cart-context";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,13 +33,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen antialiased`}
       >
-        <Header />
+        <CartModalProvider>
+          <Header />
 
-        <main className="flex-1 container max-w-7xl mx-auto mt-6">
-          {children}
-        </main>
+          <main className="flex-1 container max-w-7xl mx-auto mt-6">
+            {children}
 
-        <Footer />
+            <Suspense fallback={<div>Loading...</div>}>
+              <CartModalWrapper />
+            </Suspense>
+          </main>
+
+          <Footer />
+        </CartModalProvider>
       </body>
     </html>
   );

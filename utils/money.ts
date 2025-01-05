@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
 
-const formatAmount = (amount: number): string => {
+export const formatAmount = (amount: number): string => {
   return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -8,9 +8,23 @@ const formatAmount = (amount: number): string => {
   }).format(amount / 100);
 };
 
-const formatCurrency = (currency: string): string => currency.toUpperCase();
+export const formatCurrency = (currency: string): string =>
+  currency.toUpperCase();
 
-export const formatStripePrice = (price: Stripe.Price): string =>
-  price.unit_amount
-    ? `${formatAmount(price.unit_amount)} ${formatCurrency(price.currency)}`
-    : "Price not available";
+export const formatStripePrice = ({
+  unit_amount,
+  currency,
+  quantity = 1,
+}: {
+  unit_amount: Stripe.Price["unit_amount"];
+  currency: Stripe.Price["currency"];
+  quantity?: number;
+}): string => {
+  if (!unit_amount) {
+    return "Free";
+  }
+
+  const totalAmount = unit_amount * quantity;
+
+  return `${formatAmount(totalAmount)} ${formatCurrency(currency)}`;
+};

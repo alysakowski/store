@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import AddToCartButton from "@/components/add-to-cart-button";
+import AddToCartButton from "@/features/cart/components/add-to-cart-button";
 import * as Commerce from "commerce-kit";
 import {
   Breadcrumb,
@@ -11,10 +11,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { findSimilarProducts } from "@/features/search/utils/similar-products";
+import { findSimilarProducts } from "@/features/products/utils/similar-products";
 import ItemCard from "@/components/item-card";
 import { formatStripePrice } from "@/utils/money";
-import { deslugify } from "@/features/products/utils";
+import { deslugify } from "@/features/products/utils/slugs";
 
 async function MoreLikeThis({ product }: { product: Commerce.MappedProduct }) {
   const products = await Commerce.productBrowse({
@@ -124,7 +124,7 @@ export default async function ProductPage(props: {
             <h1 className="text-2xl font-bold">{product.name}</h1>
 
             <p className="text-xl font-semibold text-gray-600">
-              {formatStripePrice(product.default_price)}
+              {formatStripePrice({ ...product.default_price })}
             </p>
           </div>
 

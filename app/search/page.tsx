@@ -1,4 +1,4 @@
-import { searchProducts } from "@/features/search/utils";
+import { searchProducts } from "@/features/products/utils/search-products";
 import { redirect, RedirectType } from "next/navigation";
 import * as Commerce from "commerce-kit";
 import ProductsList from "@/components/products-list";
