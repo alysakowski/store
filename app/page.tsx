@@ -33,7 +33,7 @@ export default async function Home() {
         </div>
 
         <Image
-          src="/items/cup.avif"
+          src="/items/watch.png"
           className="rounded"
           height={450}
           width={450}

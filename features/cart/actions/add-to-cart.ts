@@ -7,12 +7,8 @@ import { setCartCookieJson } from "./cart-cookies";
 export async function addToCart(productId: string) {
   const cartData = await getCart();
 
-  if (!cartData) {
-    throw new Error("Cart not found");
-  }
-
   const updatedCart = await Commerce.cartAdd({
-    cartId: cartData.cart.id,
+    cartId: cartData?.cart.id,
     productId,
   });
 

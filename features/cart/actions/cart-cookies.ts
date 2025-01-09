@@ -1,3 +1,5 @@
+"use server";
+
 import { cookies } from "next/headers";
 
 const CART_COOKIE_KEY = "cart";
@@ -20,9 +22,15 @@ export async function getCartCookieJson(): Promise<{
   const cookiesValue = await cookies();
   const cartJson = cookiesValue.get(CART_COOKIE_KEY);
 
-  if (!cartJson) {
+  if (!cartJson || !cartJson.value) {
     return null;
   }
 
   return JSON.parse(cartJson.value);
+}
+
+export async function clearCartCookie(): Promise<void> {
+  const cookiesValue = await cookies();
+
+  cookiesValue.delete(CART_COOKIE_KEY);
 }

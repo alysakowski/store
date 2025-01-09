@@ -10,7 +10,7 @@ export default async function CheckoutPage() {
   const { stripeAccount, publishableKey } = await Commerce.contextGet();
 
   if (!cart) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return (

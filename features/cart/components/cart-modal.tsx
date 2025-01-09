@@ -14,6 +14,7 @@ import type * as Commerce from "commerce-kit";
 import Image from "next/image";
 import { formatAmount, formatCurrency, formatStripePrice } from "@/utils/money";
 import { useRouter } from "next/navigation";
+import { ShoppingCartIcon } from "lucide-react";
 
 function CartItem({
   product,
@@ -68,6 +69,8 @@ export function CartModal({ cart }: CartModalProps) {
       0
     ) || 0;
 
+  const isEmpty = cart?.lines.length === 0 || !cart;
+
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent>
@@ -76,34 +79,52 @@ export function CartModal({ cart }: CartModalProps) {
         </SheetHeader>
 
         <div className="flex flex-col h-full">
-          <ScrollArea className="flex-1">
-            {cart?.lines.map((item) => (
-              <CartItem
-                key={item.product.id}
-                product={item.product}
-                quantity={item.quantity}
-              />
-            ))}
-          </ScrollArea>
+          {isEmpty ? (
+            <div className="flex-1 flex items-center justify-center flex-col">
+              <ShoppingCartIcon className="h-12 w-12 text-gray-400 mb-4" />
 
-          <div className="mb-6 border-t pt-4">
-            <div className="flex justify-between items-center mb-4 flex-1">
-              <span className="font-semibold">Total:</span>
-              <span className="font-semibold">
-                {formatAmount(totalPrice)} {formatCurrency("pln")}
-              </span>
+              <h3 className="text-lg font-semibold mb-2">Your cart is empty</h3>
+
+              <p className="text-sm text-gray-500 mb-4 text-center">
+                Looks like you haven't added any items to your cart yet.
+              </p>
+
+              <Button onClick={() => setIsOpen(false)}>
+                Continue Shopping
+              </Button>
             </div>
+          ) : (
+            <ScrollArea className="flex-1">
+              {cart?.lines.map((item) => (
+                <CartItem
+                  key={item.product.id}
+                  product={item.product}
+                  quantity={item.quantity}
+                />
+              ))}
+            </ScrollArea>
+          )}
 
-            <Button
-              className="w-full"
-              onClick={() => {
-                setIsOpen(false);
-                router.push("/checkout");
-              }}
-            >
-              Proceed to Payment
-            </Button>
-          </div>
+          {!isEmpty && (
+            <div className="mb-6 border-t pt-4">
+              <div className="flex justify-between items-center mb-4 flex-1">
+                <span className="font-semibold">Total:</span>
+                <span className="font-semibold">
+                  {formatAmount(totalPrice)} {formatCurrency("pln")}
+                </span>
+              </div>
+
+              <Button
+                className="w-full"
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/checkout");
+                }}
+              >
+                Proceed to Payment
+              </Button>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>

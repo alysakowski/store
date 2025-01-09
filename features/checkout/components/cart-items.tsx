@@ -2,6 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { formatAmount, formatCurrency, formatStripePrice } from "@/utils/money";
 import type * as Commerce from "commerce-kit";
+import Image from "next/image";
 
 interface CartItemsProps {
   cart: Commerce.Cart;
@@ -27,11 +28,13 @@ export function CartItems({ cart }: CartItemsProps) {
               "border-t pt-4": index !== 0,
             })}
           >
-            <div className="flex space-x-4">
-              <img
+            <div className="flex gap-2">
+              <Image
                 src={line.product.images[0]}
                 alt={line.product.name}
-                className="w-16 h-16 object-cover rounded"
+                className="object-cover rounded"
+                width={84}
+                height={84}
               />
 
               <div className="flex flex-col justify-between">
