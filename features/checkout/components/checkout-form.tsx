@@ -64,7 +64,9 @@ export const CheckoutForm = () => {
 
       <PaymentElement />
 
-      <Button className="w-full">Proceed to Payment</Button>
+      <Button className="w-full" disabled={paymentProcessing}>
+        Proceed to Payment
+      </Button>
     </form>
   );
 };

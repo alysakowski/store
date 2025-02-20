@@ -12,7 +12,11 @@ import { useCartModal } from "../context/cart-context";
 import type { getCart } from "../actions/get-cart";
 import type * as Commerce from "commerce-kit";
 import Image from "next/image";
-import { formatAmount, formatCurrency, formatStripePrice } from "@/utils/money";
+import {
+  formatAmount,
+  formatCurrencyToUppercase,
+  formatStripePrice,
+} from "@/utils/money";
 import { useRouter } from "next/navigation";
 import { ShoppingCartIcon } from "lucide-react";
 
@@ -110,7 +114,7 @@ export function CartModal({ cart }: CartModalProps) {
               <div className="flex justify-between items-center mb-4 flex-1">
                 <span className="font-semibold">Total:</span>
                 <span className="font-semibold">
-                  {formatAmount(totalPrice)} {formatCurrency("pln")}
+                  {formatAmount(totalPrice)} {formatCurrencyToUppercase("pln")}
                 </span>
               </div>
 

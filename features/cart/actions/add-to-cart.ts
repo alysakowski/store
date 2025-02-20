@@ -4,20 +4,34 @@ import * as Commerce from "commerce-kit";
 import { getCart } from "./get-cart";
 import { setCartCookieJson } from "./cart-cookies";
 
-export async function addToCart(productId: string) {
+import { Either, right, left } from "fp-ts/Either";
+
+export async function addToCart(
+  productId: string
+): Promise<Either<string, void>> {
   const cartData = await getCart();
 
+  if (!cartData) {
+    return left("Cart not found");
+  }
+
   const updatedCart = await Commerce.cartAdd({
-    cartId: cartData?.cart.id,
+    cartId: cartData.cart.id,
     productId,
   });
 
   if (!updatedCart) {
-    throw new Error("Failed to add product to cart");
+    return left("Failed to add product to cart");
   }
 
-  await setCartCookieJson({
-    id: updatedCart.id,
-    linesCount: Commerce.cartCount(updatedCart.metadata),
-  });
+  try {
+    await setCartCookieJson({
+      id: updatedCart.id,
+      linesCount: Commerce.cartCount(updatedCart.metadata),
+    });
+
+    return right(undefined);
+  } catch (err) {
+    return left(`Failed to update cart cookies: ${(err as Error).message}`);
+  }
 }

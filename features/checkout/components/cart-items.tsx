@@ -1,6 +1,10 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { formatAmount, formatCurrency, formatStripePrice } from "@/utils/money";
+import {
+  formatAmount,
+  formatCurrencyToUppercase,
+  formatStripePrice,
+} from "@/utils/money";
 import type * as Commerce from "commerce-kit";
 import Image from "next/image";
 
@@ -58,7 +62,7 @@ export function CartItems({ cart }: CartItemsProps) {
       <div className="flex justify-between items-center mb-4 flex-1">
         <span className="font-semibold">Total:</span>
         <span className="font-semibold">
-          {formatAmount(totalPrice)} {formatCurrency("pln")}
+          {formatAmount(totalPrice)} {formatCurrencyToUppercase("pln")}
         </span>
       </div>
     </div>
