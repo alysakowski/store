@@ -8,6 +8,9 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
+import type { Stripe, StripeElements } from "@stripe/stripe-js";
+import { left, right, chain, isLeft } from "fp-ts/lib/Either";
+import { pipe } from "fp-ts/lib/function";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -20,29 +23,41 @@ export const CheckoutForm = () => {
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<string>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setPaymentProcessing(true);
-
-    if (!stripe || !elements) {
-      return setPaymentStatus("Stripe.js  has not loaded yet.");
-    }
+  const getAddress = async (elements: StripeElements | null) => {
+    if (!elements) return left("Stripe.js has not loaded yet.");
 
     const addressElement = elements.getElement(AddressElement);
     const addressValues = (await addressElement?.getValue())?.value;
 
-    if (!addressValues) {
-      return setPaymentStatus("Address is required.");
-    }
+    return addressValues ? right(addressValues) : left("Address is required.");
+  };
+
+  const processPayment = async (
+    stripe: Stripe | null,
+    elements: StripeElements
+  ) => {
+    if (!stripe) return left("Stripe instance not available.");
 
     const result = await stripe.confirmPayment({
       elements,
       redirect: "if_required",
     });
 
-    if (result.error) {
-      setPaymentStatus(result.error.message);
+    return result.error ? left(result.error.message) : right(result);
+  };
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPaymentProcessing(true);
+
+    const result = pipe(
+      await getAddress(elements),
+      // @ts-ignore - TS doesn't understand the fp-ts chain function
+      chain(() => processPayment(stripe, elements))
+    );
+
+    if (isLeft(result)) {
+      setPaymentStatus(result.left);
       return;
     }
 

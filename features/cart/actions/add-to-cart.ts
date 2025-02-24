@@ -11,12 +11,8 @@ export async function addToCart(
 ): Promise<Either<string, void>> {
   const cartData = await getCart();
 
-  if (!cartData) {
-    return left("Cart not found");
-  }
-
   const updatedCart = await Commerce.cartAdd({
-    cartId: cartData.cart.id,
+    cartId: cartData?.cart.id,
     productId,
   });
 

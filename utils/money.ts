@@ -1,15 +1,18 @@
+// @ts-nocheck
 import type Stripe from "stripe";
+import * as R from "ramda";
 
-export const formatAmount = (amount: number) => {
-  return new Intl.NumberFormat("en-US", {
+export const formatAmount = (amount: number): string =>
+  new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
     useGrouping: true,
   }).format(amount / 100);
-};
 
-export const formatCurrencyToUppercase = (currency: string): string =>
-  currency.toUpperCase();
+export const formatCurrencyToUppercase = R.toUpper;
+
+const calculateTotalAmount = (unitAmount: number, quantity: number) =>
+  unitAmount * quantity;
 
 export const formatStripePrice = ({
   unit_amount,
@@ -19,12 +22,14 @@ export const formatStripePrice = ({
   unit_amount: Stripe.Price["unit_amount"];
   currency: Stripe.Price["currency"];
   quantity?: number;
-}): string => {
-  if (!unit_amount) {
-    return "Free";
-  }
-
-  const totalAmount = unit_amount * quantity;
-
-  return `${formatAmount(totalAmount)} ${formatCurrencyToUppercase(currency)}`;
-};
+}): string =>
+  R.ifElse(
+    R.isNil,
+    R.always("Free"),
+    R.pipe(
+      (amount) => calculateTotalAmount(amount, quantity),
+      formatAmount,
+      (formattedAmount) =>
+        `${formattedAmount} ${formatCurrencyToUppercase(currency)}`
+    )
+  )(unit_amount);

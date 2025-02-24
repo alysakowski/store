@@ -7,7 +7,7 @@ import * as Commerce from "commerce-kit";
 export default async function CheckoutPage() {
   const cart = await getCart();
 
-  const { stripeAccount, publishableKey } = await Commerce.contextGet();
+  const { publishableKey } = await Commerce.contextGet();
 
   if (!cart) {
     return;
@@ -15,7 +15,6 @@ export default async function CheckoutPage() {
 
   return (
     <ElementsWrapper
-      stripeAccount={stripeAccount}
       publishableKey={publishableKey}
       clientSecret={cart.cart.client_secret ?? undefined}
     >
