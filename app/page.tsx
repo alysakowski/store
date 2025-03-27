@@ -19,6 +19,7 @@ export default async function Home() {
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
             New Arrivals 2024
           </h1>
+
           <p className="mb-6 max-w-md text-lg">
             Explore our exclusive watches collection, showcasing the latest
             arrivals designed to redefine elegance and functionality.
